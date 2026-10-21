@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Badge Blitz — Football Quiz</title>
+<style>
+:root {
+  --site-primary: #19d6a0;
+  --site-secondary: #18242c;
+  --site-background: #0d1419;
+  --site-on-primary: #071510;
+  --site-on-secondary: #f4f7f8;
+  --site-on-background: #f4f7f8;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+#app { min-height: 100vh; width: 100%; border-radius: 0; background: light-dark(#f3f6f5, var(--site-background)); color: light-dark(#15211f, var(--site-on-background)); overflow: hidden; position: relative; }
+#app::before { content:""; position:absolute; width:520px; height:520px; border-radius:50%; right:-170px; top:-240px; background:radial-gradient(circle, color-mix(in srgb, var(--site-primary) 16%, transparent), transparent 68%); opacity:var(--site-decoration-opacity); pointer-events:none; }
+.shell { max-width: 900px; margin: 0 auto; padding: calc(16px * var(--site-spacing-scale)) calc(14px * var(--site-spacing-scale)) 22px; position:relative; }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.brand { display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:-.04em; font-size:22px; }
+.brand-mark { width:38px; height:38px; display:grid; place-items:center; border-radius:12px; background:var(--site-primary); color:var(--site-on-primary); font-size:21px; }
+.pill { border:1px solid light-dark(#d7e0dd,#29373e); border-radius:999px; padding:6px 10px; font-size:10px; font-weight:750; letter-spacing:.08em; text-transform:uppercase; color:light-dark(#596864,#a9b8b6); }
+.hero { display:grid; grid-template-columns:1fr auto; align-items:end; gap:12px; margin-bottom:12px; }
+.eyebrow { display:none; color:light-dark(#168563,#57e3b4); font-size:12px; font-weight:850; letter-spacing:.17em; text-transform:uppercase; margin-bottom:12px; }
+h1 { margin:0; font-family:var(--site-font-heading); font-size:clamp(32px,7vw,58px); line-height:.94; letter-spacing:-.075em; font-weight:950; }
+.hero p { display:none; color:light-dark(#64716e,#a9b8b6); margin:15px 0 0; max-width:550px; font-size:15px; line-height:1.55; }
+.best { text-align:right; padding-bottom:4px; }
+.best span { display:block; color:light-dark(#75827e,#a9b8b6); text-transform:uppercase; letter-spacing:.12em; font-size:11px; font-weight:800; }
+.best strong { font-size:30px; letter-spacing:-.05em; }
+.game-card { background:light-dark(#fff,#131d23); border:1px solid light-dark(#dce5e2,#27363d); border-radius:16px; padding:clamp(10px,2vw,20px); box-shadow:0 18px 55px rgba(0,0,0,.08); }
+.toolbar { display:none; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+.modes { display:flex; gap:6px; padding:5px; background:light-dark(#edf2f0,#0c1419); border-radius:14px; flex-wrap:wrap; }
+.mode { border:0; border-radius:10px; background:transparent; color:light-dark(#65716e,#9aa9a7); padding:10px 13px; font-size:12px; font-weight:800; cursor:pointer; transition:.15s; }
+.mode.active { background:var(--site-primary); color:var(--site-on-primary); box-shadow:0 3px 10px rgba(25,214,160,.2); }
+.league { display:flex; align-items:center; gap:8px; color:light-dark(#6c7975,#9aa9a7); font-size:12px; font-weight:700; }
+select { border:1px solid light-dark(#d9e3df,#304149); border-radius:10px; padding:9px 12px; background:light-dark(#fff,#18242c); color:inherit; font:inherit; font-size:12px; outline-offset:3px; }
+.play-layout { display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:10px; }
+.question-panel { min-width:0; }
+.question-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px; }
+.question-label { font-size:11px; color:light-dark(#82908b,#829390); font-weight:850; text-transform:uppercase; letter-spacing:.14em; }
+.progress-label { font-size:12px; color:light-dark(#71807b,#9eafaa); font-weight:750; }
+.badge-stage { min-height:210px; display:grid; place-items:center; border:1px solid light-dark(#e0e8e5,#29383f); border-radius:15px; background:radial-gradient(circle at 50% 42%, light-dark(#f1f6f4,#1b2a31), light-dark(#f9fbfa,#10191e) 70%); position:relative; overflow:hidden; }
+.badge-stage::after { content:""; position:absolute; left:14%; right:14%; bottom:28px; height:12px; border-radius:50%; background:light-dark(rgba(20,43,35,.09),rgba(0,0,0,.28)); filter:blur(9px); }
+.crest { width:clamp(130px,24vw,190px); height:clamp(150px,27vw,210px); position:relative; z-index:1; filter:drop-shadow(0 12px 10px rgba(0,0,0,.14)); transition:transform .2s ease; }
+#crest img { display:block; width:100%; height:100%; object-fit:contain; }
+.badge-stage.pop .crest { animation:pop .32s ease; }
+@keyframes pop { 50% { transform:scale(1.07) rotate(-2deg); } }
+.answers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:9px; }
+.answer { border:1px solid light-dark(#dce5e1,#304149); background:light-dark(#fff,#18242c); border-radius:11px; min-height:48px; display:flex; align-items:center; gap:7px; padding:9px; text-align:left; color:inherit; font:inherit; cursor:pointer; transition:border-color .15s,background .15s,transform .15s; }
+.answer:hover:not(:disabled) { border-color:var(--site-primary); transform:translateY(-1px); }
+.answer:focus-visible,.primary-btn:focus-visible,.mode:focus-visible { outline:3px solid var(--site-primary); outline-offset:3px; }
+.key { width:27px; height:27px; flex:0 0 27px; display:grid; place-items:center; border-radius:8px; background:light-dark(#edf2f0,#25343b); color:light-dark(#62716c,#aebbb7); font-size:11px; font-weight:900; }
+.answer-name { font-size:13px; font-weight:750; line-height:1.3; }
+.answer.correct { border-color:#16b981; background:light-dark(#e5fbf1,#123b2e); }
+.answer.correct .key { background:#16b981; color:#06251a; }
+.answer.wrong { border-color:#f06464; background:light-dark(#fff0f0,#3a2023); }
+.answer.wrong .key { background:#f06464; color:#2a0a0a; }
+.answer:disabled { cursor:default; }
+.side-panel { display:flex; flex-direction:column; gap:7px; }
+.stat-card { border:1px solid light-dark(#e0e8e5,#29383f); border-radius:12px; padding:10px; background:light-dark(#f8faf9,#17232a); }
+.stat-head { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:11px; color:light-dark(#71807b,#9eafaa); text-transform:uppercase; letter-spacing:.11em; font-weight:850; }
+.timer { font-size:clamp(25px,4vw,38px); font-weight:950; letter-spacing:-.07em; line-height:1.15; margin:7px 0 9px; font-variant-numeric:tabular-nums; }
+.timer.urgent { color:#f06464; }
+.timer-bar { height:6px; border-radius:999px; overflow:hidden; background:light-dark(#e1e9e5,#2b3b42); }
+.timer-fill { height:100%; width:100%; border-radius:999px; background:var(--site-primary); transition:width .25s linear,background .2s; }
+.stat-value { font-size:33px; font-weight:950; letter-spacing:-.06em; margin-top:8px; }
+.stat-caption { font-size:12px; color:light-dark(#7b8984,#93a39e); margin-top:2px; }
+.primary-btn { width:100%; border:0; border-radius:13px; background:var(--site-primary); color:var(--site-on-primary); font:inherit; font-weight:900; font-size:14px; padding:15px 18px; cursor:pointer; transition:filter .15s,transform .15s; }
+.primary-btn:hover { filter:brightness(1.04); transform:translateY(-1px); }
+.secondary-btn { width:100%; border:1px solid light-dark(#dce5e1,#304149); border-radius:13px; background:transparent; color:inherit; font:inherit; font-weight:800; font-size:13px; padding:13px 18px; cursor:pointer; }
+.feedback { min-height:24px; padding-top:12px; font-size:13px; font-weight:800; color:light-dark(#6c7975,#9eafaa); }
+.feedback.good { color:#16a777; }
+.feedback.bad { color:#e35e63; }
+.howto { display:none; margin-top:20px; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; color:light-dark(#83908b,#829390); font-size:12px; }
+.howto strong { color:light-dark(#4f5e59,#bdc9c5); }
+kbd { font:inherit; font-size:11px; font-weight:800; padding:3px 6px; border:1px solid light-dark(#d7e0dc,#35454c); border-radius:5px; background:light-dark(#fff,#18242c); }
+.overlay { display:none; position:absolute; inset:0; background:light-dark(rgba(243,246,245,.9),rgba(7,13,17,.88)); backdrop-filter:blur(8px); z-index:5; align-items:center; justify-content:center; padding:20px; border-radius:24px; }
+.overlay.show { display:flex; }
+.result-box { width:min(100%,360px); text-align:center; padding:30px 24px; border:1px solid light-dark(#dce5e1,#304149); border-radius:22px; background:light-dark(#fff,#17232a); box-shadow:0 24px 60px rgba(0,0,0,.15); }
+.result-icon { font-size:40px; margin-bottom:12px; }
+.result-box h2 { margin:0; font-size:34px; letter-spacing:-.06em; }
+.result-box p { color:light-dark(#6f7d78,#9eafaa); line-height:1.5; font-size:14px; }
+.result-score { font-size:58px; font-weight:950; letter-spacing:-.07em; margin:10px 0; color:light-dark(#15211f,var(--site-primary)); }
+.footer-note { display:none; text-align:center; font-size:11px; color:light-dark(#9aa5a1,#62716e); margin-top:22px; }
+@media (max-width:760px) { .shell { padding:10px 8px 14px; } .topbar { margin-bottom:12px; } .brand { font-size:18px; gap:8px; } .brand-mark { width:32px; height:32px; font-size:18px; border-radius:9px; } .hero { grid-template-columns:1fr auto; align-items:center; margin-bottom:10px; } h1 { font-size:clamp(30px,8vw,42px); } .best { text-align:right; display:block; padding:0; } .best span { font-size:8px; letter-spacing:.07em; } .best strong { font-size:22px; } .play-layout { grid-template-columns:minmax(0,1fr) 88px; gap:7px; } .side-panel { gap:6px; } .stat-card { padding:7px; border-radius:10px; } .timer { font-size:25px; margin:6px 0; } .stat-head { font-size:8px; letter-spacing:.03em; } .stat-value { font-size:22px; margin-top:4px; } .stat-caption { font-size:9px; } .side-actions { display:flex; flex-direction:column; gap:6px; } .primary-btn,.secondary-btn { padding:11px 4px; font-size:11px; } .badge-stage { min-height:clamp(155px,42vw,220px); } .crest { width:clamp(110px,32vw,155px); height:clamp(125px,36vw,170px); } .question-label { font-size:9px; letter-spacing:.06em; } .progress-label { font-size:10px; } }
+@media (max-width:430px) { .shell { padding-left:6px; padding-right:6px; } .pill { font-size:9px; padding:5px 7px; } .game-card { padding:7px; border-radius:12px; } .answers { gap:6px; margin-top:7px; } .answer { padding:7px 6px; min-height:48px; gap:5px; } .answer-name { font-size:10px; overflow-wrap:anywhere; } .key { width:19px; height:19px; flex-basis:19px; font-size:9px; border-radius:6px; } .play-layout { grid-template-columns:minmax(0,1fr) 80px; gap:6px; } .timer { font-size:22px; } .stat-value { font-size:20px; } .stat-card { padding:6px; } .stat-head { font-size:7px; } .primary-btn,.secondary-btn { padding:10px 3px; font-size:10px; } }
+</style>
+</head>
+<body>
+<div id="app" data-sites-preview-theme="custom">
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">⚽</div><span>BADGE BLITZ</span></div>
+      <div class="pill">60 seconds</div>
+    </header>
+    <section class="hero">
+      <div><div class="eyebrow">How well do you know football?</div><h1>NAME THAT<br>BADGE.</h1><p>One badge. Four choices. Sixty seconds. How many clubs and national teams can you identify before the final whistle?</p></div>
+      <div class="best"><span>Best this session</span><strong id="bestScore">—</strong></div>
+    </section>
+    <section class="game-card">
+      <div class="toolbar">
+        <div class="modes" role="group" aria-label="Quiz type">
+          <button class="mode active" data-mode="clubs">Club badges</button>
+          <button class="mode" data-mode="nations">National teams</button>
+          <button class="mode" data-mode="mixed">Mixed game</button>
+        </div>
+        <label class="league">League <select id="leagueFilter" aria-label="League filter"><option value="all">All leagues + extra clubs</option><option value="Premier League">Premier League</option><option value="La Liga">La Liga</option><option value="Bundesliga">Bundesliga</option><option value="Serie A">Serie A</option><option value="Ligue 1">Ligue 1</option><option value="Other clubs">Other clubs</option></select></label>
+      </div>
+      <div class="play-layout">
+        <div class="question-panel">
+          <div class="question-head"><div class="question-label" id="roundLabel">Name that badge</div><div class="progress-label">Question <span id="questionNum">—</span></div></div>
+          <div class="badge-stage" id="badgeStage"><div class="crest" id="crest"></div></div>
+          <div class="answers" id="answers" aria-label="Answer choices">
+            <button class="answer" disabled><span class="key">1</span><span class="answer-name">Ready when you are</span></button>
+            <button class="answer" disabled><span class="key">2</span><span class="answer-name">Four options</span></button>
+            <button class="answer" disabled><span class="key">3</span><span class="answer-name">One correct answer</span></button>
+            <button class="answer" disabled><span class="key">4</span><span class="answer-name">Beat the clock</span></button>
+          </div>
+          <div class="feedback" id="feedback" aria-live="polite">Ready?</div>
+        </div>
+        <aside class="side-panel">
+          <div class="stat-card timer-card"><div class="stat-head"><span>Time remaining</span><span>⏱</span></div><div class="timer" id="timer">01:00</div><div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div></div>
+          <div class="stat-card"><div class="stat-head"><span>Correct</span><span>✓</span></div><div class="stat-value" id="score">0</div><div class="stat-caption">points scored</div></div>
+          <div class="stat-card"><div class="stat-head"><span>Streak</span><span>✦</span></div><div class="stat-value" id="streak">0</div><div class="stat-caption">correct in a row</div></div>
+          <div class="side-actions"><button class="primary-btn" id="startBtn">Start game ↗</button><button class="secondary-btn" id="resetBtn">Reset round</button></div>
+        </aside>
+      </div>
+      <div class="howto"><span><strong>Quick tip:</strong> trust your first instinct.</span><span>Keyboard: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to answer</span></div>
+      <div class="overlay" id="overlay"><div class="result-box"><div class="result-icon">🏁</div><h2>Full time!</h2><p>You scored</p><div class="result-score" id="finalScore">0</div><p id="resultCopy">Can you beat your score?</p><button class="primary-btn" id="playAgain">Play again ↗</button></div></div>
+    </section>
+    <div class="footer-note">Prototype game · Badge artwork is stylized placeholder art, not official club or federation logos.</div>
+  </main>
+</div>
+<script>
+const clubs = [
+ {name:'Arsenal',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Chelsea',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Liverpool',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Manchester City',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Manchester United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Tottenham Hotspur',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Aston Villa',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Newcastle United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'West Ham United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Brighton and Hove Albion',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
+ {name:'Real Madrid',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Barcelona',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Atlético Madrid',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Athletic Club',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Real Betis',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Real Sociedad',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Sevilla',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Valencia',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Villarreal',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Celta Vigo',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
+ {name:'Bayern Munich',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Borussia Dortmund',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'RB Leipzig',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'VfB Stuttgart',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'VfL Wolfsburg',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'TSG Hoffenheim',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'SC Freiburg',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Borussia Mönchengladbach',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Eintracht Frankfurt',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Mainz 05',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Inter Milan',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'AC Milan',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Napoli',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'AS Roma',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Atalanta',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Torino',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Genoa',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Fiorentina',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Juventus',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Lazio',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
+ {name:'Paris Saint-Germain',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Marseille',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Monaco',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Lyon',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Rennes',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Saint-Étienne',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Strasbourg',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Lens',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Lille',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Reims',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
+ {name:'Ajax',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'FC Porto',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Benfica',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Sporting CP',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Club Brugge',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Zenit Saint Petersburg',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'CSKA Moscow',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Dynamo Kyiv',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
+ {name:'Shakhtar Donetsk',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'}
+];
+const nations = [
+ {name:'Argentina',league:'National team',c:['#75aadb','#ffffff','#f6b40e'],style:'shield',motif:'stripes'},
+ {name:'Belgium',league:'National team',c:['#111111','#f5d000','#e32219'],style:'shield',motif:'stripes'},
+ {name:'Brazil',league:'National team',c:['#ffdf00','#009739','#002776'],style:'shield',motif:'stripes'},
+ {name:'Croatia',league:'National team',c:['#ff0000','#ffffff','#171796'],style:'shield',motif:'stripes'},
+ {name:'England',league:'National team',c:['#ffffff','#ce1124','#1c3767'],style:'shield',motif:'stripes'},
+ {name:'France',league:'National team',c:['#002395','#ffffff','#ed2939'],style:'shield',motif:'stripes'},
+ {name:'Germany',league:'National team',c:['#111111','#dd0000','#ffce00'],style:'shield',motif:'stripes'},
+ {name:'Italy',league:'National team',c:['#0066b3','#ffffff','#009246'],style:'shield',motif:'stripes'},
+ {name:'Netherlands',league:'National team',c:['#f36c21','#ffffff','#21468b'],style:'shield',motif:'stripes'},
+ {name:'Portugal',league:'National team',c:['#006600','#ff0000','#ffcc00'],style:'shield',motif:'stripes'},
+ {name:'Spain',league:'National team',c:['#aa151b','#f1bf00','#aa151b'],style:'shield',motif:'stripes'},
+ {name:'Switzerland',league:'National team',c:['#da291c','#ffffff','#da291c'],style:'shield',motif:'stripes'}
+];
+const badgeImages = {
+ 'Arsenal':'arsenal.png',
+ 'Chelsea':'chelsea.png',
+ 'Liverpool':'liverpool.png',
+ 'Manchester City':'manchester-city.png',
+ 'Manchester United':'manchester-united.png',
+ 'Tottenham Hotspur':'tottenham-hotspur.png',
+ 'Aston Villa':'aston-villa.png',
+ 'Newcastle United':'newcastle-united.png',
+ 'West Ham United':'west-ham-united.png',
+ 'Brighton and Hove Albion':'brighton-and-hove-albion.png',
+ 'Real Madrid':'real-madrid.png',
+ 'Barcelona':'barcelona.png',
+ 'Atlético Madrid':'atletico-madrid.png',
+ 'Athletic Club':'athletic-club.png',
+ 'Real Betis':'real-betis.png',
+ 'Real Sociedad':'real-sociedad.png',
+ 'Sevilla':'sevilla.png',
+ 'Valencia':'valencia.png',
+ 'Villarreal':'villarreal.png',
+ 'Celta Vigo':'celta-vigo.png',
+ 'Bayern Munich':'bayern-munich.png',
+ 'Borussia Dortmund':'borussia-dortmund.png',
+ 'RB Leipzig':'rb-leipzig.png',
+ 'VfB Stuttgart':'vfb-stuttgart.png',
+ 'VfL Wolfsburg':'vfl-wolfsburg.png',
+ 'TSG Hoffenheim':'tsg-hoffenheim.png',
+ 'SC Freiburg':'sc-freiburg.png',
+ 'Borussia Mönchengladbach':'borussia-monchengladbach.png',
+ 'Eintracht Frankfurt':'eintracht-frankfurt.png',
+ 'Mainz 05':'mainz-05.png',
+ 'Inter Milan':'inter-milan.png',
+ 'AC Milan':'ac-milan.png',
+ 'Napoli':'napoli.png',
+ 'AS Roma':'as-roma.png',
+ 'Atalanta':'atalanta.png',
+ 'Torino':'torino.png',
+ 'Genoa':'genoa.png',
+ 'Fiorentina':'fiorentina.png',
+ 'Juventus':'juventus.png',
+ 'Lazio':'lazio.png',
+ 'Paris Saint-Germain':'paris-saint-germain.png',
+ 'Marseille':'marseille.png',
+ 'Monaco':'monaco.png',
+ 'Lyon':'lyon.png',
+ 'Rennes':'rennes.png',
+ 'Saint-Étienne':'saint-etienne.png',
+ 'Strasbourg':'strasbourg.png',
+ 'Lens':'lens.png',
+ 'Lille':'lille.png',
+ 'Reims':'reims.png',
+ 'Ajax':'ajax.png',
+ 'FC Porto':'fc-porto.png',
+ 'Benfica':'benfica.png',
+ 'Sporting CP':'sporting-cp.png',
+ 'Club Brugge':'club-brugge.png',
+ 'Zenit Saint Petersburg':'zenit-st-petersburg.png',
+ 'CSKA Moscow':'cska-moscow.png',
+ 'Dynamo Kyiv':'dynamo-kyiv.png',
+ 'Shakhtar Donetsk':'shakhtar-donetsk.png',
+ 'Argentina':'argentina.png',
+ 'Belgium':'belgium.png',
+ 'Brazil':'brazil.png',
+ 'Croatia':'croatia.png',
+ 'England':'england.png',
+ 'France':'france.png',
+ 'Germany':'germany.png',
+ 'Italy':'italy.png',
+ 'Netherlands':'netherlands.png',
+ 'Portugal':'portugal.png',
+ 'Spain':'spain.png',
+ 'Switzerland':'switzerland.png',
+};
+const $ = id => document.getElementById(id);
+let mode='mixed', deck=[], current=null, score=0, streak=0, seconds=60, question=0, running=false, answered=false, ticker=null, nextTimeout=null, best=0;
+const svgWrap = (inner) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="100%" height="100%" aria-hidden="true">${inner}</svg>`;
+function crestSvg(team) {
+ const [a,b,c]=team.c;
+ let body='';
+ if(team.style==='round') body=`<circle cx="100" cy="105" r="78" fill="${a}" stroke="${c}" stroke-width="8"/><circle cx="100" cy="105" r="63" fill="${b}" stroke="${a}" stroke-width="7"/>`;
+ else if(team.style==='oval') body=`<ellipse cx="100" cy="105" rx="65" ry="82" fill="${a}" stroke="${c}" stroke-width="7"/><ellipse cx="100" cy="105" rx="52" ry="68" fill="${b}" stroke="${a}" stroke-width="5"/>`;
+ else body=`<path d="M28 30 L172 30 L166 132 Q153 174 100 200 Q47 174 34 132 Z" fill="${a}" stroke="${c}" stroke-width="7" stroke-linejoin="round"/><path d="M42 43 L158 43 L153 128 Q143 161 100 183 Q57 161 47 128 Z" fill="${b}" stroke="${a}" stroke-width="4"/>`;
+ let motif='';
+ if(team.motif==='stripes'||team.motif==='bars') { for(let i=0;i<5;i++) motif+=`<path d="M${57+i*21} 48 L${57+i*21} 155" stroke="${team.motif==='bars'?a:c}" stroke-width="${team.motif==='bars'?10:8}" opacity=".88"/>`; }
+ if(team.motif==='diamonds'||team.motif==='diamond'||team.motif==='checks') { for(let r=0;r<4;r++) for(let col=0;col<4;col++) motif+=`<path d="M${68+col*17} ${70+r*17} l8 -12 l8 12 l-8 12 Z" fill="${(r+col)%2===0?c:a}" opacity=".96"/>`; }
+ if(team.motif==='diagonal') { motif=`<path d="M52 150 L132 55 M73 166 L153 71 M45 117 L108 42 M95 174 L164 92" stroke="${c}" stroke-width="10" opacity=".9"/>`; }
+ if(team.motif==='cross') { motif=`<path d="M89 56 H111 V91 H145 V113 H111 V149 H89 V113 H55 V91 H89 Z" fill="${c}"/>`; }
+ if(team.motif==='star') { motif=`<path d="M100 56 L111 84 L141 85 L118 103 L126 132 L100 115 L74 132 L82 103 L59 85 L89 84 Z" fill="${c}" stroke="${a}" stroke-width="2"/>`; }
+ if(team.motif==='tower') { motif=`<path d="M76 150 L81 98 L88 98 L88 72 L100 55 L112 72 L112 98 L119 98 L124 150 Z" fill="${c}"/><path d="M93 150 V112 H107 V150" fill="${a}"/>`; }
+ if(team.motif==='sun') { motif=`<circle cx="100" cy="105" r="30" fill="${c}"/>`; for(let i=0;i<12;i++){let angle=i*Math.PI/6;let x1=100+Math.cos(angle)*37,y1=105+Math.sin(angle)*37,x2=100+Math.cos(angle)*48,y2=105+Math.sin(angle)*48;motif+=`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${c}" stroke-width="5"/>`;}}
+ if(team.motif==='roundel') motif=`<circle cx="100" cy="105" r="28" fill="${c}" stroke="${b}" stroke-width="8"/><circle cx="100" cy="105" r="12" fill="${a}"/>`;
+ if(team.motif==='yin') motif=`<circle cx="100" cy="105" r="34" fill="${c}"/><path d="M100 71 A17 17 0 0 1 100 105 A17 17 0 0 0 100 139 A34 34 0 0 0 100 71" fill="${a}"/><circle cx="100" cy="88" r="5" fill="${a}"/><circle cx="100" cy="122" r="5" fill="${c}"/>`;
+ if(team.motif==='leaf') motif=`<path d="M100 142 C56 117 75 80 100 70 C125 80 144 117 100 142 Z" fill="${c}"/><path d="M100 139 L100 79 M100 105 L82 92 M100 116 L119 98" stroke="${a}" stroke-width="4" fill="none"/>`;
+ if(team.motif==='eagle'||team.motif==='lion'||team.motif==='rooster') motif=`<path d="M65 72 L91 84 L100 65 L109 84 L135 72 L126 105 L139 124 L110 120 L100 145 L90 120 L61 124 L74 105 Z" fill="${c}" stroke="${a}" stroke-width="3"/>`;
+ if(team.motif==='checks') { for(let r=0;r<4;r++) for(let col=0;col<4;col++) motif+=`<rect x="${68+col*16}" y="${75+r*16}" width="16" height="16" fill="${(r+col)%2===0?a:c}"/>`; }
+ if(!motif) motif=`<circle cx="100" cy="105" r="31" fill="${c}"/>`;
+ const detail=team.style==='round'||team.style==='oval'?`<circle cx="100" cy="105" r="${team.style==='oval'?43:48}" fill="none" stroke="${c}" stroke-width="4"/>`:`<path d="M55 48 L145 48" stroke="${c}" stroke-width="4"/>`;
+ return svgWrap(`<defs><clipPath id="clip"><circle cx="100" cy="105" r="${team.style==='round'?58:52}"/></clipPath></defs>${body}${detail}<g>${motif}</g><path d="M44 34 L156 34" stroke="${c}" stroke-width="3" opacity=".7"/>`);
+}
+function eligiblePool(){
+ const filter=$('leagueFilter').value;
+ if(mode==='nations') return nations.filter(t=>badgeImages[t.name]);
+ if(mode==='clubs') return clubs.filter(t=>badgeImages[t.name]&&(filter==='all'||t.league===filter));
+ return [...clubs.filter(t=>badgeImages[t.name]&&(filter==='all'||t.league===filter)),...nations.filter(t=>badgeImages[t.name])];
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function makeQuestion(){
+ let pool=eligiblePool();
+ if(pool.length<4){$('feedback').textContent='Choose a league with at least four clubs.';return;}
+ if(!deck.length) deck=shuffle(pool.slice());
+ current=deck.pop();
+ let wrongPool=pool.filter(t=>t.name!==current.name);
+ const options=shuffle([current,...shuffle(wrongPool).slice(0,3)]);
+ const badgePath=badgeImages[current.name];
+ $('crest').innerHTML=badgePath?`<img src="${badgePath}" alt="" draggable="false">`:crestSvg(current);
+ $('badgeStage').classList.remove('pop'); void $('badgeStage').offsetWidth; $('badgeStage').classList.add('pop');
+ $('roundLabel').textContent=current.league==='National team'?'Identify this national team':'Identify this club';
+ $('questionNum').textContent=question+1;
+ $('answers').innerHTML=options.map((t,i)=>`<button class="answer" data-name="${t.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" aria-label="Option ${i+1}: ${t.name}"><span class="key">${i+1}</span><span class="answer-name">${t.name}</span></button>`).join('');
+ [...$('answers').querySelectorAll('button')].forEach((btn,i)=>btn.addEventListener('click',()=>choose(btn,options[i])));
+ answered=false; $('feedback').textContent='Pick the correct badge.'; $('feedback').className='feedback';
+}
+function renderStats(){ $('score').textContent=score; $('streak').textContent=streak; $('bestScore').textContent=best; $('timer').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; $('timer').classList.toggle('urgent',seconds<=10&&running); $('timerFill').style.width=`${seconds/60*100}%`; $('timerFill').style.background=seconds<=10?'#f06464':'var(--site-primary)'; }
+function choose(btn,team){if(!running||answered)return;answered=true;const buttons=[...$('answers').querySelectorAll('button')];buttons.forEach(b=>b.disabled=true);const isCorrect=team.name===current.name;
+ if(isCorrect){score++;streak++;best=Math.max(best,score);btn.classList.add('correct');$('feedback').textContent='Correct! +1 point';$('feedback').className='feedback good';}
+ else {streak=0;btn.classList.add('wrong');const correct=buttons.find(b=>b.querySelector('.answer-name').textContent===current.name);if(correct)correct.classList.add('correct');$('feedback').textContent=`Not quite — it was ${current.name}.`;$('feedback').className='feedback bad';}
+ question++;renderStats();nextTimeout=setTimeout(()=>{if(running)makeQuestion();},500);
+}
+function endGame(){running=false;clearInterval(ticker);clearTimeout(nextTimeout);$('startBtn').textContent='Start game ↗';$('finalScore').textContent=score;$('resultCopy').textContent=`You answered ${score} correctly in 60 seconds. ${score>=15?'Excellent badge knowledge!':score>=8?'Solid effort — go again and beat it.':'One more round and you will know these badges by heart.'}`;$('overlay').classList.add('show');}
+function startGame(){clearInterval(ticker);clearTimeout(nextTimeout);$('overlay').classList.remove('show');score=0;streak=0;seconds=60;question=0;running=true;answered=false;deck=[];$('startBtn').textContent='Game in progress…';$('startBtn').disabled=true;renderStats();makeQuestion();ticker=setInterval(()=>{if(!running)return;seconds--;renderStats();if(seconds<=0){seconds=0;renderStats();endGame();}},1000);}
+function resetGame(){clearInterval(ticker);clearTimeout(nextTimeout);running=false;answered=false;score=0;streak=0;seconds=60;question=0;deck=[];current=null;$('overlay').classList.remove('show');$('startBtn').disabled=false;$('startBtn').textContent='Start game ↗';$('timer').textContent='01:00';$('timerFill').style.width='100%';$('timerFill').style.background='var(--site-primary)';$('timer').classList.remove('urgent');$('score').textContent='0';$('streak').textContent='0';$('questionNum').textContent='—';$('roundLabel').textContent='Name that badge';$('crest').innerHTML='';$('answers').innerHTML='<button class="answer" disabled><span class="key">1</span><span class="answer-name">Ready when you are</span></button><button class="answer" disabled><span class="key">2</span><span class="answer-name">Four options</span></button><button class="answer" disabled><span class="key">3</span><span class="answer-name">One correct answer</span></button><button class="answer" disabled><span class="key">4</span><span class="answer-name">Beat the clock</span></button>';$('feedback').textContent='Ready?';$('feedback').className='feedback';$('startBtn').disabled=false;}
+$('startBtn').addEventListener('click',startGame);$('resetBtn').addEventListener('click',resetGame);$('playAgain').addEventListener('click',startGame);
+document.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{if(running)return;document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));btn.classList.add('active');mode=btn.dataset.mode;$('leagueFilter').disabled=mode==='nations';$('leagueFilter').style.opacity=mode==='nations'?'.45':'1';resetGame();}));
+$('leagueFilter').addEventListener('change',()=>{if(!running)resetGame();});
+document.addEventListener('keydown',e=>{if(!running||answered||!['1','2','3','4'].includes(e.key))return;const btn=$('answers').querySelectorAll('button')[Number(e.key)-1];if(btn&&!btn.disabled)btn.click();});
+resetGame();
+</script>
+</body>
+</html>
