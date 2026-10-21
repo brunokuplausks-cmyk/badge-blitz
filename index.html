@@ -44,6 +44,13 @@ h1 { margin:0; font-family:var(--site-font-heading); font-size:clamp(32px,7vw,58
 .league { display:flex; align-items:center; gap:8px; color:light-dark(#6c7975,#9aa9a7); font-size:12px; font-weight:700; }
 select { border:1px solid light-dark(#d9e3df,#304149); border-radius:10px; padding:9px 12px; background:light-dark(#fff,#18242c); color:inherit; font:inherit; font-size:12px; outline-offset:3px; }
 .play-layout { display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:10px; }
+.pre-game-controls { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:12px; }
+.pre-game-controls .stat-card { min-width:0; }
+.pre-game-controls .stat-value { font-size:25px; margin-top:3px; }
+.pre-game-controls .stat-caption { font-size:11px; }
+.pre-game-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; grid-column:1 / -1; }
+.pre-game-actions .primary-btn,.pre-game-actions .secondary-btn { min-height:48px; }
+.timer-card { display:none; }
 .question-panel { min-width:0; }
 .question-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px; }
 .question-label { font-size:11px; color:light-dark(#82908b,#829390); font-weight:850; text-transform:uppercase; letter-spacing:.14em; }
@@ -54,12 +61,12 @@ select { border:1px solid light-dark(#d9e3df,#304149); border-radius:10px; paddi
 #crest img { display:block; width:100%; height:100%; object-fit:contain; }
 .badge-stage.pop .crest { animation:pop .32s ease; }
 @keyframes pop { 50% { transform:scale(1.07) rotate(-2deg); } }
-.answers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:9px; }
-.answer { border:1px solid light-dark(#dce5e1,#304149); background:light-dark(#fff,#18242c); border-radius:11px; min-height:48px; display:flex; align-items:center; gap:7px; padding:9px; text-align:left; color:inherit; font:inherit; cursor:pointer; transition:border-color .15s,background .15s,transform .15s; }
+.answers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px; }
+.answer { border:1px solid light-dark(#dce5e1,#304149); background:light-dark(#fff,#18242c); border-radius:12px; min-height:64px; display:flex; align-items:center; gap:10px; padding:13px; text-align:left; color:inherit; font:inherit; cursor:pointer; transition:border-color .15s,background .15s,transform .15s; }
 .answer:hover:not(:disabled) { border-color:var(--site-primary); transform:translateY(-1px); }
 .answer:focus-visible,.primary-btn:focus-visible,.mode:focus-visible { outline:3px solid var(--site-primary); outline-offset:3px; }
 .key { width:27px; height:27px; flex:0 0 27px; display:grid; place-items:center; border-radius:8px; background:light-dark(#edf2f0,#25343b); color:light-dark(#62716c,#aebbb7); font-size:11px; font-weight:900; }
-.answer-name { font-size:13px; font-weight:750; line-height:1.3; }
+.answer-name { font-size:15px; font-weight:800; line-height:1.3; }
 .answer.correct { border-color:#16b981; background:light-dark(#e5fbf1,#123b2e); }
 .answer.correct .key { background:#16b981; color:#06251a; }
 .answer.wrong { border-color:#f06464; background:light-dark(#fff0f0,#3a2023); }
@@ -91,8 +98,8 @@ kbd { font:inherit; font-size:11px; font-weight:800; padding:3px 6px; border:1px
 .result-box p { color:light-dark(#6f7d78,#9eafaa); line-height:1.5; font-size:14px; }
 .result-score { font-size:58px; font-weight:950; letter-spacing:-.07em; margin:10px 0; color:light-dark(#15211f,var(--site-primary)); }
 .footer-note { display:none; text-align:center; font-size:11px; color:light-dark(#9aa5a1,#62716e); margin-top:22px; }
-@media (max-width:760px) { .shell { padding:10px 8px 14px; } .topbar { margin-bottom:12px; } .brand { font-size:18px; gap:8px; } .brand-mark { width:32px; height:32px; font-size:18px; border-radius:9px; } .hero { grid-template-columns:1fr auto; align-items:center; margin-bottom:10px; } h1 { font-size:clamp(30px,8vw,42px); } .best { text-align:right; display:block; padding:0; } .best span { font-size:8px; letter-spacing:.07em; } .best strong { font-size:22px; } .play-layout { grid-template-columns:minmax(0,1fr) 88px; gap:7px; } .side-panel { gap:6px; } .stat-card { padding:7px; border-radius:10px; } .timer { font-size:25px; margin:6px 0; } .stat-head { font-size:8px; letter-spacing:.03em; } .stat-value { font-size:22px; margin-top:4px; } .stat-caption { font-size:9px; } .side-actions { display:flex; flex-direction:column; gap:6px; } .primary-btn,.secondary-btn { padding:11px 4px; font-size:11px; } .badge-stage { min-height:clamp(155px,42vw,220px); } .crest { width:clamp(110px,32vw,155px); height:clamp(125px,36vw,170px); } .question-label { font-size:9px; letter-spacing:.06em; } .progress-label { font-size:10px; } }
-@media (max-width:430px) { .shell { padding-left:6px; padding-right:6px; } .pill { font-size:9px; padding:5px 7px; } .game-card { padding:7px; border-radius:12px; } .answers { gap:6px; margin-top:7px; } .answer { padding:7px 6px; min-height:48px; gap:5px; } .answer-name { font-size:10px; overflow-wrap:anywhere; } .key { width:19px; height:19px; flex-basis:19px; font-size:9px; border-radius:6px; } .play-layout { grid-template-columns:minmax(0,1fr) 80px; gap:6px; } .timer { font-size:22px; } .stat-value { font-size:20px; } .stat-card { padding:6px; } .stat-head { font-size:7px; } .primary-btn,.secondary-btn { padding:10px 3px; font-size:10px; } }
+@media (max-width:760px) { .shell { padding:10px 8px 14px; } .topbar { margin-bottom:12px; } .brand { font-size:18px; gap:8px; } .brand-mark { width:32px; height:32px; font-size:18px; border-radius:9px; } .hero { grid-template-columns:1fr auto; align-items:center; margin-bottom:10px; } h1 { font-size:clamp(30px,8vw,42px); } .best { text-align:right; display:block; padding:0; } .best span { font-size:8px; letter-spacing:.07em; } .best strong { font-size:22px; } .play-layout { grid-template-columns:minmax(0,1fr); gap:7px; } .side-panel { display:none; } .pre-game-controls { gap:6px; margin-bottom:9px; } .pre-game-controls .stat-card { padding:9px; border-radius:10px; } .pre-game-controls .stat-head { font-size:9px; letter-spacing:.04em; } .pre-game-controls .stat-value { font-size:25px; } .pre-game-actions .primary-btn,.pre-game-actions .secondary-btn { padding:12px 8px; font-size:12px; } .badge-stage { min-height:clamp(170px,48vw,250px); } .crest { width:clamp(125px,35vw,180px); height:clamp(140px,39vw,195px); } .question-label { font-size:9px; letter-spacing:.06em; } .progress-label { font-size:10px; } }
+@media (max-width:430px) { .shell { padding-left:6px; padding-right:6px; } .pill { font-size:9px; padding:5px 7px; } .game-card { padding:7px; border-radius:12px; } .answers { gap:7px; margin-top:8px; } .answer { padding:10px 8px; min-height:60px; gap:6px; } .answer-name { font-size:12px; overflow-wrap:anywhere; } .key { width:23px; height:23px; flex-basis:23px; font-size:10px; border-radius:6px; } .stat-card { padding:7px; } .pre-game-controls .stat-head { font-size:8px; } .pre-game-controls .stat-value { font-size:22px; } .pre-game-actions .primary-btn,.pre-game-actions .secondary-btn { padding:11px 5px; font-size:11px; } }
 </style>
 </head>
 <body>
@@ -115,6 +122,11 @@ kbd { font:inherit; font-size:11px; font-weight:800; padding:3px 6px; border:1px
         </div>
         <label class="league">League <select id="leagueFilter" aria-label="League filter"><option value="all">All leagues + extra clubs</option><option value="Premier League">Premier League</option><option value="La Liga">La Liga</option><option value="Bundesliga">Bundesliga</option><option value="Serie A">Serie A</option><option value="Ligue 1">Ligue 1</option><option value="Other clubs">Other clubs</option></select></label>
       </div>
+      <div class="pre-game-controls" aria-label="Game status and controls">
+        <div class="stat-card"><div class="stat-head"><span>Score</span><span>✓</span></div><div class="stat-value" id="score">0</div><div class="stat-caption">points scored</div></div>
+        <div class="stat-card"><div class="stat-head"><span>Correct in a row</span><span>✦</span></div><div class="stat-value" id="streak">0</div><div class="stat-caption">consecutive correct answers</div></div>
+        <div class="pre-game-actions"><button class="primary-btn" id="startBtn">Start game ↗</button><button class="secondary-btn" id="resetBtn">Reset round</button></div>
+      </div>
       <div class="play-layout">
         <div class="question-panel">
           <div class="question-head"><div class="question-label" id="roundLabel">Name that badge</div><div class="progress-label">Question <span id="questionNum">—</span></div></div>
@@ -129,9 +141,6 @@ kbd { font:inherit; font-size:11px; font-weight:800; padding:3px 6px; border:1px
         </div>
         <aside class="side-panel">
           <div class="stat-card timer-card"><div class="stat-head"><span>Time remaining</span><span>⏱</span></div><div class="timer" id="timer">01:00</div><div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div></div>
-          <div class="stat-card"><div class="stat-head"><span>Correct</span><span>✓</span></div><div class="stat-value" id="score">0</div><div class="stat-caption">points scored</div></div>
-          <div class="stat-card"><div class="stat-head"><span>Streak</span><span>✦</span></div><div class="stat-value" id="streak">0</div><div class="stat-caption">correct in a row</div></div>
-          <div class="side-actions"><button class="primary-btn" id="startBtn">Start game ↗</button><button class="secondary-btn" id="resetBtn">Reset round</button></div>
         </aside>
       </div>
       <div class="howto"><span><strong>Quick tip:</strong> trust your first instinct.</span><span>Keyboard: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd> to answer</span></div>
@@ -142,152 +151,128 @@ kbd { font:inherit; font-size:11px; font-weight:800; padding:3px 6px; border:1px
 </div>
 <script>
 const clubs = [
- {name:'Arsenal',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Chelsea',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Liverpool',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Manchester City',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Manchester United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Tottenham Hotspur',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Aston Villa',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Newcastle United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'West Ham United',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Brighton and Hove Albion',league:'Premier League',c:['#7a263a','#ffffff','#f2d16b'],style:'shield',motif:'stripes'},
- {name:'Real Madrid',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Barcelona',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Atlético Madrid',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Athletic Club',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Real Betis',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Real Sociedad',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Sevilla',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Valencia',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Villarreal',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Celta Vigo',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'shield',motif:'stripes'},
- {name:'Bayern Munich',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Borussia Dortmund',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'RB Leipzig',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'VfB Stuttgart',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'VfL Wolfsburg',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'TSG Hoffenheim',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'SC Freiburg',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Borussia Mönchengladbach',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Eintracht Frankfurt',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Mainz 05',league:'Bundesliga',c:['#dc052d','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Inter Milan',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'AC Milan',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Napoli',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'AS Roma',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Atalanta',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Torino',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Genoa',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Fiorentina',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Juventus',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Lazio',league:'Serie A',c:['#00529f','#ffffff','#111111'],style:'shield',motif:'stripes'},
- {name:'Paris Saint-Germain',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Marseille',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Monaco',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Lyon',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Rennes',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Saint-Étienne',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Strasbourg',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Lens',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Lille',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Reims',league:'Ligue 1',c:['#004170','#ffffff','#ed1c24'],style:'shield',motif:'stripes'},
- {name:'Ajax',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'FC Porto',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Benfica',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Sporting CP',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Club Brugge',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Zenit Saint Petersburg',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'CSKA Moscow',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Dynamo Kyiv',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'},
- {name:'Shakhtar Donetsk',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45b'],style:'shield',motif:'stripes'}
+ {name:'Celta Vigo',league:'La Liga',c:['#8fd3f4','#ffffff','#d9273e'],style:'shield',motif:'cross'},
+ {name:'FC Porto',league:'Other clubs',c:['#0050a4','#ffffff','#d9b45d'],style:'round',motif:'cross'},
+ {name:'Manchester United',league:'Premier League',c:['#da291c','#fbe122','#111111'],style:'shield',motif:'cross'},
+ {name:'Zenit Saint Petersburg',league:'Other clubs',c:['#009fe3','#ffffff','#092c78'],style:'round',motif:'diagonal'},
+ {name:'Brighton and Hove Albion',league:'Premier League',c:['#0057b8','#ffffff','#f2c94c'],style:'round',motif:'bird'},
+ {name:'Barcelona',league:'La Liga',c:['#004d98','#a50044','#edbb00'],style:'shield',motif:'bars'},
+ {name:'Borussia Dortmund',league:'Bundesliga',c:['#fde100','#111111','#ffffff'],style:'round',motif:'bars'},
+ {name:'CSKA Moscow',league:'Other clubs',c:['#d71920','#003f8f','#ffffff'],style:'shield',motif:'cross'},
+ {name:'Real Madrid',league:'La Liga',c:['#ffffff','#17479e','#d4af37'],style:'round',motif:'diagonal'},
+ {name:'Mainz 05',league:'Bundesliga',c:['#c8102e','#ffffff','#e0b42c'],style:'shield',motif:'bars'},
+ {name:'Manchester City',league:'Premier League',c:['#6cabdd','#ffffff','#1c2c5b'],style:'round',motif:'stripes'},
+ {name:'Marseille',league:'Ligue 1',c:['#ffffff','#00a3d9','#1b315e'],style:'round',motif:'star'},
+ {name:'Monaco',league:'Ligue 1',c:['#e21b36','#ffffff','#c5a25d'],style:'shield',motif:'diagonal'},
+ {name:'Napoli',league:'Serie A',c:['#12a0d7','#ffffff','#123d70'],style:'round',motif:'star'},
+ {name:'Newcastle United',league:'Premier League',c:['#111111','#ffffff','#3b8b5b'],style:'shield',motif:'stripes'},
+ {name:'Paris Saint-Germain',league:'Ligue 1',c:['#004170','#ed1c24','#ffffff'],style:'round',motif:'tower'},
+ {name:'RB Leipzig',league:'Bundesliga',c:['#ffffff','#d5001c','#1b1b1b'],style:'shield',motif:'stripes'},
+ {name:'Real Betis',league:'La Liga',c:['#00954c','#ffffff','#c5a25d'],style:'shield',motif:'stripes'},
+ {name:'Real Sociedad',league:'La Liga',c:['#00529f','#ffffff','#d5a72b'],style:'round',motif:'stripes'},
+ {name:'Rennes',league:'Ligue 1',c:['#111111','#e32219','#ffffff'],style:'shield',motif:'bars'},
+ {name:'Saint-Étienne',league:'Ligue 1',c:['#008b52','#ffffff','#d5a72b'],style:'shield',motif:'star'},
+ {name:'SC Freiburg',league:'Bundesliga',c:['#ffffff','#111111','#e32219'],style:'round',motif:'bird'},
+ {name:'Sevilla',league:'La Liga',c:['#ffffff','#e32219','#111111'],style:'shield',motif:'bars'},
+ {name:'Strasbourg',league:'Ligue 1',c:['#00529f','#e32219','#ffffff'],style:'shield',motif:'stripes'},
+ {name:'Torino',league:'Serie A',c:['#8e1b2f','#ffffff','#d5a72b'],style:'shield',motif:'bull'},
+ {name:'Tottenham Hotspur',league:'Premier League',c:['#ffffff','#132257','#5c91c7'],style:'shield',motif:'star'},
+ {name:'TSG Hoffenheim',league:'Bundesliga',c:['#00529f','#ffffff','#4fa4dc'],style:'shield',motif:'diagonal'},
+ {name:'Valencia',league:'La Liga',c:['#ffffff','#111111','#ed8b00'],style:'shield',motif:'stripes'},
+ {name:'VfB Stuttgart',league:'Bundesliga',c:['#ffffff','#e32219','#111111'],style:'shield',motif:'bars'},
+ {name:'VfL Wolfsburg',league:'Bundesliga',c:['#ffffff','#65b32e','#00542a'],style:'round',motif:'star'},
+ {name:'Villarreal',league:'La Liga',c:['#ffed00','#00529f','#e32219'],style:'shield',motif:'bars'},
+ {name:'West Ham United',league:'Premier League',c:['#7a263a','#80bfff','#f2d16b'],style:'shield',motif:'cross'},
+ {name:'AC Milan',league:'Serie A',c:['#fb090b','#111111','#f4c542'],style:'oval',motif:'stripes'},
+ {name:'Arsenal',league:'Premier League',c:['#db0007','#ffffff','#9c0005'],style:'shield',motif:'bars'},
+ {name:'AS Roma',league:'Serie A',c:['#8e1b2f','#f5c542','#f6f1e8'],style:'shield',motif:'wolf'},
+ {name:'Aston Villa',league:'Premier League',c:['#670e36','#95bfe5','#f7d154'],style:'shield',motif:'star'},
+ {name:'Atalanta',league:'Serie A',c:['#00529f','#111111','#ffffff'],style:'round',motif:'stripes'},
+ {name:'Athletic Club',league:'La Liga',c:['#ee2523','#ffffff','#111111'],style:'shield',motif:'cross'},
+ {name:'Atlético Madrid',league:'La Liga',c:['#cb3524','#ffffff','#272e61'],style:'shield',motif:'stripes'},
+ {name:'Bayern Munich',league:'Bundesliga',c:['#dc052d','#ffffff','#0066b2'],style:'round',motif:'diamonds'},
+ {name:'Borussia Mönchengladbach',league:'Bundesliga',c:['#ffffff','#111111','#00a651'],style:'shield',motif:'diagonal'},
+ {name:'Chelsea',league:'Premier League',c:['#034694','#ffffff','#d7b56d'],style:'round',motif:'star'},
+ {name:'Eintracht Frankfurt',league:'Bundesliga',c:['#e32219','#ffffff','#111111'],style:'shield',motif:'eagle'},
+ {name:'Fiorentina',league:'Serie A',c:['#542583','#ffffff','#d5a72b'],style:'shield',motif:'fleur'},
+ {name:'Genoa',league:'Serie A',c:['#c8102e','#00529f','#ffffff'],style:'shield',motif:'stripes'},
+ {name:'Inter Milan',league:'Serie A',c:['#00529f','#111111','#ffffff'],style:'round',motif:'diagonal'},
+ {name:'Lens',league:'Ligue 1',c:['#e32219','#f4c542','#111111'],style:'shield',motif:'bars'},
+ {name:'Lille',league:'Ligue 1',c:['#e32219','#00529f','#ffffff'],style:'shield',motif:'diagonal'},
+ {name:'Liverpool',league:'Premier League',c:['#c8102e','#f6f1e8','#007a53'],style:'shield',motif:'cross'},
+ {name:'Lyon',league:'Ligue 1',c:['#ffffff','#1b3f8b','#e51d35'],style:'shield',motif:'bars'},
+ {name:'Ajax',league:'Other clubs',c:['#ffffff','#d71920','#111111'],style:'round',motif:'diagonal'},
+ {name:'PSV',league:'Other clubs',c:['#ffffff','#ed1c24','#111111'],style:'shield',motif:'stripes'}
 ];
 const nations = [
- {name:'Argentina',league:'National team',c:['#75aadb','#ffffff','#f6b40e'],style:'shield',motif:'stripes'},
- {name:'Belgium',league:'National team',c:['#111111','#f5d000','#e32219'],style:'shield',motif:'stripes'},
- {name:'Brazil',league:'National team',c:['#ffdf00','#009739','#002776'],style:'shield',motif:'stripes'},
- {name:'Croatia',league:'National team',c:['#ff0000','#ffffff','#171796'],style:'shield',motif:'stripes'},
- {name:'England',league:'National team',c:['#ffffff','#ce1124','#1c3767'],style:'shield',motif:'stripes'},
- {name:'France',league:'National team',c:['#002395','#ffffff','#ed2939'],style:'shield',motif:'stripes'},
- {name:'Germany',league:'National team',c:['#111111','#dd0000','#ffce00'],style:'shield',motif:'stripes'},
+ {name:'France',league:'National team',c:['#002395','#ffffff','#ed2939'],style:'shield',motif:'rooster'},
+ {name:'Germany',league:'National team',c:['#111111','#dd0000','#ffce00'],style:'shield',motif:'bars'},
+ {name:'Brazil',league:'National team',c:['#ffdf00','#009739','#002776'],style:'round',motif:'diamond'},
+ {name:'Croatia',league:'National team',c:['#ff0000','#ffffff','#171796'],style:'shield',motif:'checks'},
  {name:'Italy',league:'National team',c:['#0066b3','#ffffff','#009246'],style:'shield',motif:'stripes'},
- {name:'Netherlands',league:'National team',c:['#f36c21','#ffffff','#21468b'],style:'shield',motif:'stripes'},
- {name:'Portugal',league:'National team',c:['#006600','#ff0000','#ffcc00'],style:'shield',motif:'stripes'},
- {name:'Spain',league:'National team',c:['#aa151b','#f1bf00','#aa151b'],style:'shield',motif:'stripes'},
- {name:'Switzerland',league:'National team',c:['#da291c','#ffffff','#da291c'],style:'shield',motif:'stripes'}
+ {name:'Netherlands',league:'National team',c:['#f36c21','#ffffff','#21468b'],style:'shield',motif:'lion'},
+ {name:'England',league:'National team',c:['#ffffff','#ce1124','#1c3767'],style:'shield',motif:'cross'},
 ];
 const badgeImages = {
- 'Arsenal':'arsenal.png',
- 'Chelsea':'chelsea.png',
- 'Liverpool':'liverpool.png',
- 'Manchester City':'manchester-city.png',
- 'Manchester United':'manchester-united.png',
- 'Tottenham Hotspur':'tottenham-hotspur.png',
- 'Aston Villa':'aston-villa.png',
- 'Newcastle United':'newcastle-united.png',
- 'West Ham United':'west-ham-united.png',
- 'Brighton and Hove Albion':'brighton-and-hove-albion.png',
- 'Real Madrid':'real-madrid.png',
- 'Barcelona':'barcelona.png',
- 'Atlético Madrid':'atletico-madrid.png',
- 'Athletic Club':'athletic-club.png',
- 'Real Betis':'real-betis.png',
- 'Real Sociedad':'real-sociedad.png',
- 'Sevilla':'sevilla.png',
- 'Valencia':'valencia.png',
- 'Villarreal':'villarreal.png',
  'Celta Vigo':'celta-vigo.png',
- 'Bayern Munich':'bayern-munich.png',
- 'Borussia Dortmund':'borussia-dortmund.png',
- 'RB Leipzig':'rb-leipzig.png',
- 'VfB Stuttgart':'vfb-stuttgart.png',
- 'VfL Wolfsburg':'vfl-wolfsburg.png',
- 'TSG Hoffenheim':'tsg-hoffenheim.png',
- 'SC Freiburg':'sc-freiburg.png',
- 'Borussia Mönchengladbach':'borussia-monchengladbach.png',
- 'Eintracht Frankfurt':'eintracht-frankfurt.png',
- 'Mainz 05':'mainz-05.png',
- 'Inter Milan':'inter-milan.png',
- 'AC Milan':'ac-milan.png',
- 'Napoli':'napoli.png',
- 'AS Roma':'as-roma.png',
- 'Atalanta':'atalanta.png',
- 'Torino':'torino.png',
- 'Genoa':'genoa.png',
- 'Fiorentina':'fiorentina.png',
- 'Juventus':'juventus.png',
- 'Lazio':'lazio.png',
- 'Paris Saint-Germain':'paris-saint-germain.png',
- 'Marseille':'marseille.png',
- 'Monaco':'monaco.png',
- 'Lyon':'lyon.png',
- 'Rennes':'rennes.png',
- 'Saint-Étienne':'saint-etienne.png',
- 'Strasbourg':'strasbourg.png',
- 'Lens':'lens.png',
- 'Lille':'lille.png',
- 'Reims':'reims.png',
- 'Ajax':'ajax.png',
  'FC Porto':'fc-porto.png',
- 'Benfica':'benfica.png',
- 'Sporting CP':'sporting-cp.png',
- 'Club Brugge':'club-brugge.png',
+ 'Manchester United':'manchester-united.png',
  'Zenit Saint Petersburg':'zenit-st-petersburg.png',
- 'CSKA Moscow':'cska-moscow.png',
- 'Dynamo Kyiv':'dynamo-kyiv.png',
- 'Shakhtar Donetsk':'shakhtar-donetsk.png',
- 'Argentina':'argentina.png',
- 'Belgium':'belgium.png',
- 'Brazil':'brazil.png',
- 'Croatia':'croatia.png',
- 'England':'england.png',
+ 'Brighton and Hove Albion':'brighton-and-hove-albion.png',
  'France':'france.png',
  'Germany':'germany.png',
+ 'Ajax':'ajax.png',
+ 'Barcelona':'barcelona.png',
+ 'Borussia Dortmund':'borussia-dortmund.png',
+ 'Brazil':'brazil.png',
+ 'Croatia':'croatia.png',
+ 'CSKA Moscow':'cska-moscow.png',
  'Italy':'italy.png',
  'Netherlands':'netherlands.png',
- 'Portugal':'portugal.png',
- 'Spain':'spain.png',
- 'Switzerland':'switzerland.png',
+ 'Real Madrid':'real-madrid.png',
+ 'Mainz 05':'mainz-05.png',
+ 'Manchester City':'manchester-city.png',
+ 'Marseille':'marseille.png',
+ 'Monaco':'monaco.png',
+ 'Napoli':'napoli.png',
+ 'Newcastle United':'newcastle-united.png',
+ 'Paris Saint-Germain':'paris-saint-germain.png',
+ 'RB Leipzig':'rb-leipzig.png',
+ 'Real Betis':'real-betis.png',
+ 'Real Sociedad':'real-sociedad.png',
+ 'Rennes':'rennes.png',
+ 'Saint-Étienne':'saint-etienne.png',
+ 'SC Freiburg':'sc-freiburg.png',
+ 'Sevilla':'sevilla.png',
+ 'Strasbourg':'strasbourg.png',
+ 'Torino':'torino.png',
+ 'Tottenham Hotspur':'tottenham-hotspur.png',
+ 'TSG Hoffenheim':'tsg-hoffenheim.png',
+ 'Valencia':'valencia.png',
+ 'VfB Stuttgart':'vfb-stuttgart.png',
+ 'VfL Wolfsburg':'vfl-wolfsburg.png',
+ 'Villarreal':'villarreal.png',
+ 'West Ham United':'west-ham-united.png',
+ 'AC Milan':'ac-milan.png',
+ 'Arsenal':'arsenal.png',
+ 'AS Roma':'as-roma.png',
+ 'Aston Villa':'aston-villa.png',
+ 'Atalanta':'atalanta.png',
+ 'Athletic Club':'athletic-club.png',
+ 'Atlético Madrid':'atletico-madrid.png',
+ 'Bayern Munich':'bayern-munich.png',
+ 'Borussia Mönchengladbach':'borussia-monchengladbach.png',
+ 'Chelsea':'chelsea.png',
+ 'Eintracht Frankfurt':'eintracht-frankfurt.png',
+ 'England':'england.png',
+ 'Fiorentina':'fiorentina.png',
+ 'Genoa':'genoa.png',
+ 'Inter Milan':'inter-milan.png',
+ 'Lens':'lens.png',
+ 'Lille':'lille.png',
+ 'Liverpool':'liverpool.png',
+ 'Lyon':'lyon.png',
+ 'PSV':'psv.png'
 };
 const $ = id => document.getElementById(id);
 let mode='mixed', deck=[], current=null, score=0, streak=0, seconds=60, question=0, running=false, answered=false, ticker=null, nextTimeout=null, best=0;
